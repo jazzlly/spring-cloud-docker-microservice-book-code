@@ -2,12 +2,13 @@
 
 for path in $(ls)
 do
-    abbv=${path#microservice-}
+    abbv=${path#consumer-movie-}
 
     echo path is : $path
-    echo abbv is : $abbv
 
     if [ "$path" != "$abbv" ];then
+        abbv=consumer-${abbv}
+        echo abbv is : $abbv
         mv $path $abbv
     fi
 done
