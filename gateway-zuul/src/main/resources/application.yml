@@ -9,3 +9,36 @@ eureka:
       defaultZone: http://localhost:8761/eureka/
   instance:
     prefer-ip-address: true
+
+#zuul:
+#  routes:
+#    microservice-provider-user: /user/**
+
+#zuul:
+#  routes:
+#    user-route:
+#      path: /user/**
+#      service-id: microservice-provider-user
+#      strip-prefix: false
+
+zuul:
+  routes:
+    microservice-provider-user:
+      path: /user/**
+      strip-prefix: false
+  ignore-security-headers: false
+
+# 禁用掉ribbon的eureka使用。详见：
+# http://cloud.spring.io/spring-cloud-static/Camden.SR3/#_example_disable_eureka_use_in_ribbon
+ribbon:
+  eureka:
+    enabled: false
+
+microservice-provider-user:
+  ribbon:
+    listOfServers: localhost:8000
+    #listOfServers: localhost:8000,localhost:8001
+
+logging:
+  level:
+    com.netflix: DEBUG
