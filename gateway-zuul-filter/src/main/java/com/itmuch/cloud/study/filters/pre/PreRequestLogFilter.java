@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 
+import java.util.Map;
+
 public class PreRequestLogFilter extends ZuulFilter {
   private static final Logger LOGGER = LoggerFactory.getLogger(PreRequestLogFilter.class);
 
@@ -29,8 +31,18 @@ public class PreRequestLogFilter extends ZuulFilter {
   @Override
   public Object run() {
     RequestContext ctx = RequestContext.getCurrentContext();
+    ctx.setDebugRequest(true);
+    ctx.setDebugRouting(true);
+
     HttpServletRequest request = ctx.getRequest();
     PreRequestLogFilter.LOGGER.info(String.format("send %s request to %s", request.getMethod(), request.getRequestURL().toString()));
+    for (Map.Entry<String, Object> entry : ctx.entrySet()) {
+      PreRequestLogFilter.LOGGER.info(String.format("key: %s, value: %s", entry.getKey(), entry.getValue()));
+    }
+
+    // todo: relace Cookie is OK
+    // ctx.addZuulRequestHeader("Cookie", "JSESSIONID=1gcl22h3bm8lr39bstbt4i4i9");
+
     return null;
   }
 }

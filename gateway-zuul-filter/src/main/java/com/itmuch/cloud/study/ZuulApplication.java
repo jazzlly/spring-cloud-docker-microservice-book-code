@@ -6,6 +6,7 @@ import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.context.annotation.Bean;
 
 import com.itmuch.cloud.study.filters.pre.PreRequestLogFilter;
+import com.itmuch.cloud.study.filters.pre.PostRespLogFilter;
 
 @SpringBootApplication
 @EnableZuulProxy
@@ -17,5 +18,10 @@ public class ZuulApplication {
   @Bean
   public PreRequestLogFilter preRequestLogFilter() {
     return new PreRequestLogFilter();
+  }
+
+  @Bean
+  public PostRespLogFilter postRespLogFilter() {
+    return new PostRespLogFilter();
   }
 }

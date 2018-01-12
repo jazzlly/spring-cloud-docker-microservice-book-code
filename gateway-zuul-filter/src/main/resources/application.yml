@@ -16,21 +16,44 @@ zuul:
       path: /user/**
       strip-prefix: false
     mdm:
-      url: http://192.168.11.103:9110
+      # OK for url properties
+      # url: http://192.168.11.103:9110
       path: /mdm/**
       strip-prefix: false
-  ignore-security-headers: false
+    uas:
+      url: http://192.168.11.101:9200
+      path: /uni_auth/**
+      strip-prefix: false
 
-# 禁用掉ribbon的eureka使用。详见：
-# http://cloud.spring.io/spring-cloud-static/Camden.SR3/#_example_disable_eureka_use_in_ribbon
+  ignore-security-headers: false
+  sensitive-headers: Set-Cookie;Cookie
+  add-host-header: true
+  # retryable: false      # 网络请求失败后不会重试
+
+  # ignored-patterns: /**/hello/**
+
 ribbon:
   eureka:
-    enabled: false
+    enabled: false      # 如果enable eureka, 则ribbon会根据service id去查找服务
+                        # 对于没有注册到eureka的mdm, uas就会出错
+  ReadTimeout: 30000
 
 microservice-provider-user:
   ribbon:
     listOfServers: localhost:8000
     #listOfServers: localhost:8000,localhost:8001
+
+mdm:
+  ribbon:
+    listOfServers: 192.168.11.103:9110
+
+management:
+  security:
+    enabled: false
+
+security:
+  basic:
+    enabled: false
 
 logging:
   level:
